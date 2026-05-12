@@ -110,6 +110,10 @@ class ServerLifecycleNotifier extends Notifier<bool> {
   }
 
   Future<void> start(int port) async {
+    if (_lifecycle.isRunning) {
+      state = true;
+      return;
+    }
     await _lifecycle.start(port);
     state = true;
   }

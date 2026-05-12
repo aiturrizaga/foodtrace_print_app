@@ -13,7 +13,10 @@ class App extends ConsumerWidget {
     ref.listen(printerConfigProvider, (_, next) {
       next.whenData((config) {
         if (config.autoStartServer && !config.alwaysOnMode) {
-          ref.read(serverLifecycleProvider.notifier).start(config.serverPort);
+          final notifier = ref.read(serverLifecycleProvider.notifier);
+          if (!notifier.isRunning) {
+            notifier.start(config.serverPort);
+          }
         }
       });
     });
