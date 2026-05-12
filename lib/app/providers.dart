@@ -68,10 +68,16 @@ class PrinterStatusNotifier extends AsyncNotifier<bool> {
   Future<bool> _check() async {
     final config = await ref.read(printerConfigProvider.future);
     if (config.printerIp.isEmpty) return false;
-    return ref.read(brotherPrinterServiceProvider).isReachable(config);
+
+    try {
+      return await ref.read(brotherPrinterServiceProvider).isReachable(config);
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> refresh() async {
+    if (state is AsyncLoading) return;
     state = const AsyncLoading();
     state = await AsyncValue.guard(_check);
   }

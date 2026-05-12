@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:another_brother/printer_info.dart' as brother;
@@ -7,6 +9,10 @@ import '../../config/models/printer_config.dart';
 import '../../core/errors/failures.dart';
 import '../models/print_data.dart';
 import '../labels/registry.dart';
+
+// Global mutex — prevents concurrent calls to the Brother SDK
+// which is not thread-safe and can cause JNI crashes.
+bool _printerBusy = false;
 
 /// Service responsible for rendering label templates and sending
 /// print jobs to a Brother QL printer over the network.
@@ -18,8 +24,14 @@ class BrotherPrinterService {
   /// Throws [TemplateFailure] if the template is not registered.
   /// Throws [PrinterFailure] if the printer rejects the job.
   Future<void> print(PrintData print, PrinterConfig config) async {
+    if (_printerBusy) {
+      throw PrinterFailure('Printer is busy, try again.');
+    }
+    _printerBusy = true;
+
     final template = TemplateRegistry.get(print.templateName);
     if (template == null) {
+      _printerBusy = false;
       throw TemplateFailure(
         'Template "${print.templateName}" is not registered.',
       );
@@ -51,24 +63,30 @@ class BrotherPrinterService {
     } catch (e) {
       if (e is TemplateFailure || e is PrinterFailure) rethrow;
       throw PrinterFailure('Failed to print: $e');
+    } finally {
+      _printerBusy = false;
     }
   }
 
   /// Checks whether the printer is reachable and ready.
   Future<bool> isReachable(PrinterConfig config) async {
+    if (config.printerIp.isEmpty) return false;
+
+    if (_printerBusy) return false;
+    _printerBusy = true;
+
     try {
-      final printer = brother.Printer();
-      final printInfo = brother.PrinterInfo();
-
-      printInfo.printerModel = _resolveModel(config.printerModel);
-      printInfo.port = brother.Port.NET;
-      printInfo.ipAddress = config.printerIp;
-
-      await printer.setPrinterInfo(printInfo);
-      final status = await printer.getPrinterStatus();
-      return status.errorCode == brother.ErrorCode.ERROR_NONE;
+      final socket = await Socket.connect(
+        config.printerIp,
+        9100,
+        timeout: const Duration(seconds: 3),
+      );
+      socket.destroy();
+      return true;
     } catch (_) {
       return false;
+    } finally {
+      _printerBusy = false;
     }
   }
 

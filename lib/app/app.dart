@@ -29,6 +29,7 @@ class App extends ConsumerWidget {
             brightness: Brightness.light,
           ),
           useMaterial3: true,
+          scaffoldBackgroundColor: const Color(0xFFF5F5F5),
         ),
       ),
     );

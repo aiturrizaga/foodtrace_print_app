@@ -49,7 +49,7 @@
             android:exported="false" />
 
         <receiver
-            android:name="com.pravera.flutter_foreground_task.service.BootReceiver"
+            android:name="com.pravera.flutter_foreground_task.receiver.BootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
