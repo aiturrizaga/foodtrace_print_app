@@ -13,7 +13,6 @@ Future<void> main() async {
   FlutterForegroundTask.initCommunicationPort();
   const ForegroundServerService().initialize();
 
-  // Modo tradicional — el sistema reserva espacio para sus barras
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
     overlays: SystemUiOverlay.values,

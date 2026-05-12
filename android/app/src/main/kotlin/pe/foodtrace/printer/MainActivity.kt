@@ -1,4 +1,4 @@
-package com.example.foodtrace_printer_app
+package pe.foodtrace.printer
 
 import io.flutter.embedding.android.FlutterActivity
 
