@@ -1,0 +1,49 @@
+name: foodtrace_printer_app
+description: FoodTrace local printer service for Brother QL label printers.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Navigation
+  go_router: ^15.1.2
+
+  # HTTP server
+  shelf: ^1.4.2
+  shelf_router: ^1.1.4
+
+  # Brother printer SDK
+  another_brother: ^2.0.3
+
+  # Local storage
+  shared_preferences: ^2.5.3
+
+  # UI
+  gap: ^3.0.1
+
+  permission_handler: ^11.3.1
+  qr: ^3.0.2
+  package_info_plus: ^10.1.0
+  device_info_plus: ^13.1.0
+  flutter_foreground_task: ^9.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.14
+  riverpod_generator: ^2.6.5
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.5
+
+flutter:
+  uses-material-design: true
