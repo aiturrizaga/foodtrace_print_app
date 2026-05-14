@@ -35,6 +35,7 @@ dependencies:
   package_info_plus: ^10.1.0
   device_info_plus: ^13.1.0
   flutter_foreground_task: ^9.2.2
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +49,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/certs/
 
 flutter_launcher_icons:
   android: "launcher_icon"

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
@@ -40,7 +41,14 @@ class ServerLifecycle {
         .addMiddleware(logRequests())
         .addHandler(router);
 
-    _server = await shelf_io.serve(pipeline, InternetAddress.anyIPv4, port);
+    final securityContext = await _buildSecurityContext();
+
+    _server = await shelf_io.serve(
+      pipeline,
+      InternetAddress.anyIPv4,
+      port,
+      securityContext: securityContext,
+    );
   }
 
   Future<void> stop() async {
@@ -51,5 +59,14 @@ class ServerLifecycle {
   Future<void> restart(int port) async {
     await stop();
     await start(port);
+  }
+
+  Future<SecurityContext> _buildSecurityContext() async {
+    final certBytes = await rootBundle.load('assets/certs/fullchain.pem');
+    final keyBytes = await rootBundle.load('assets/certs/privkey.pem');
+
+    return SecurityContext()
+      ..useCertificateChainBytes(certBytes.buffer.asUint8List())
+      ..usePrivateKeyBytes(keyBytes.buffer.asUint8List());
   }
 }
