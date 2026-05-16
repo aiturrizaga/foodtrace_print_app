@@ -1,7 +1,7 @@
 name: foodtrace_printer_app
 description: FoodTrace local printer service for Brother QL label printers.
 publish_to: none
-version: 1.0.0+1
+version: 1.0.2+1
 
 environment:
   sdk: ^3.11.5
