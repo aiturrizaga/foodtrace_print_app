@@ -31,10 +31,26 @@ class ProductionTemplate implements BaseTemplate {
           ),
         )
         .separator(thickness: 3)
-        .field(label: 'LOTE:', value: data['lote'] ?? '')
-        .field(label: 'PRODUCCION:', value: data['produccion'] ?? '')
-        .field(label: 'PRODUCTO:', value: data['producto'] ?? '')
-        .field(label: 'OPERADOR:', value: data['operador'] ?? '')
+        .field(
+          label: 'LOTE:',
+          value: data['lote'] ?? '',
+          valueStyle: LabelTextStyle(weight: FontWeight.bold),
+        )
+        .field(
+          label: 'PRODUCCION:',
+          value: data['produccion'] ?? '',
+          valueStyle: LabelTextStyle(weight: FontWeight.bold),
+        )
+        .field(
+          label: 'PRODUCTO:',
+          value: data['producto'] ?? '',
+          valueStyle: LabelTextStyle(weight: FontWeight.bold),
+        )
+        .field(
+          label: 'OPERADOR:',
+          value: data['operador'] ?? '',
+          valueStyle: LabelTextStyle(weight: FontWeight.bold),
+        )
         .qr(
           value: _buildQrValue(data),
           position: QrPosition.right,
