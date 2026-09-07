@@ -4,6 +4,7 @@ class StorageKeys {
 
   static const String printerIp = 'printer_ip';
   static const String printerModel = 'printer_model';
+  static const String printerMedia = 'printer_media';
   static const String serverPort = 'server_port';
   static const String autoCut = 'auto_cut';
   static const String autoStartServer = 'auto_start_server';

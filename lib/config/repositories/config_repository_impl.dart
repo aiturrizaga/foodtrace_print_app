@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/constants/storage_keys.dart';
 import '../models/printer_config.dart';
+import '../models/printer_media.dart';
 import 'config_repository.dart';
 
 /// SharedPreferences-backed implementation of [ConfigRepository].
@@ -18,6 +19,7 @@ class ConfigRepositoryImpl implements ConfigRepository {
       printerModel:
           _prefs.getString(StorageKeys.printerModel) ??
           AppConstants.defaultPrinterModel,
+      media: PrinterMedia.fromId(_prefs.getString(StorageKeys.printerMedia)),
       serverPort:
           _prefs.getInt(StorageKeys.serverPort) ??
           AppConstants.defaultServerPort,
@@ -32,6 +34,7 @@ class ConfigRepositoryImpl implements ConfigRepository {
     await Future.wait([
       _prefs.setString(StorageKeys.printerIp, config.printerIp),
       _prefs.setString(StorageKeys.printerModel, config.printerModel),
+      _prefs.setString(StorageKeys.printerMedia, config.media.id),
       _prefs.setInt(StorageKeys.serverPort, config.serverPort),
       _prefs.setBool(StorageKeys.autoCut, config.autoCut),
       _prefs.setBool(StorageKeys.autoStartServer, config.autoStartServer),

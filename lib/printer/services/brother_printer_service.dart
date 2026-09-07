@@ -6,6 +6,7 @@ import 'package:another_brother/printer_info.dart' as brother;
 import 'package:another_brother/label_info.dart';
 
 import '../../config/models/printer_config.dart';
+import '../../config/models/printer_media.dart';
 import '../../core/errors/failures.dart';
 import '../models/print_data.dart';
 import '../labels/registry.dart';
@@ -47,7 +48,7 @@ class BrotherPrinterService {
       printInfo.printerModel = _resolveModel(config.printerModel);
       printInfo.port = brother.Port.NET;
       printInfo.ipAddress = config.printerIp;
-      printInfo.labelNameIndex = QL700.ordinalFromID(QL700.W62RB.getId());
+      printInfo.labelNameIndex = _resolveMediaLabelIndex(config.media);
       printInfo.isAutoCut = config.autoCut;
       printInfo.isCutAtEnd = config.autoCut;
       printInfo.numberOfCopies = print.copies;
@@ -95,6 +96,16 @@ class BrotherPrinterService {
     final codec = await ui.instantiateImageCodec(bytes);
     final frame = await codec.getNextFrame();
     return frame.image;
+  }
+
+  int _resolveMediaLabelIndex(PrinterMedia media) {
+    final label = switch (media.id) {
+      'w62' => QL700.W62,
+      'w62rb' => QL700.W62RB,
+      _ => QL700.W62,
+    };
+
+    return QL700.ordinalFromID(label.getId());
   }
 
   brother.Model _resolveModel(String modelName) {
